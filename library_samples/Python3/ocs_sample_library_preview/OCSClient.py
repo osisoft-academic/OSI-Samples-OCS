@@ -3,14 +3,24 @@ from .DataViews import DataViews
 from .Types import Types
 from .Streams import Streams
 
+import requests
+
 
 class OCSClient:
     """
     A client that handles communication with OCS
     """
 
-    def __init__(self, apiversion, tenant, url, clientId, clientSecret,
-                 acceptVerbosity=False):
+    def __init__(
+        self,
+        apiversion,
+        tenant,
+        url,
+        clientId,
+        clientSecret,
+        acceptVerbosity=False,
+        webclient=requests,
+    ):
         """
         Use this to help comuninaication with OCS
         :param apiversion: Version of the api you are communicating with
@@ -21,8 +31,9 @@ class OCSClient:
         :param acceptVerbosity: Sets whether in value calls you get all values
                 or just non-default values
         """
-        self.__baseClient = BaseClient(apiversion, tenant, url, clientId,
-                                       clientSecret, acceptVerbosity)
+        self.__baseClient = BaseClient(
+            apiversion, tenant, url, clientId, clientSecret, acceptVerbosity, webclient
+        )
         self.__DataViews = DataViews(self.__baseClient)
         self.__Types = Types(self.__baseClient)
         self.__Streams = Streams(self.__baseClient)

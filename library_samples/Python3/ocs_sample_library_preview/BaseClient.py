@@ -12,8 +12,16 @@ import time
 class BaseClient(object):
     """Handles communication with Sds Service.  Internal Use"""
 
-    def __init__(self, apiversion, tenant, url, clientId, clientSecret,
-                 acceptVerbosity=False):
+    def __init__(
+        self,
+        apiversion,
+        tenant,
+        url,
+        clientId,
+        clientSecret,
+        acceptVerbosity=False,
+        webclient=requests,
+    ):
         self.__apiversion = apiversion
         self.__tenant = tenant
         self.__clientId = clientId
@@ -22,11 +30,12 @@ class BaseClient(object):
 
         self.__token = ""
         self.__expiration = 0
+        self.__webclient = webclient
         self.__getToken()
         self.__acceptVerbosity = acceptVerbosity
         self.__requestTimeout = None
 
-        self.__uri_API = url + '/api/' + apiversion
+        self.__uri_API = url + "/api/" + apiversion
 
     @property
     def uri(self):
@@ -81,37 +90,45 @@ class BaseClient(object):
         Gets the bearer token
         :return:
         """
-        if ((self.__expiration - time.time()) > 5 * 60):
+        if (self.__expiration - time.time()) > 5 * 60:
             return self.__token
 
         discoveryUrl = requests.get(
             self.__url + "/identity/.well-known/openid-configuration",
-            headers={"Accept": "application/json"})
+            headers={"Accept": "application/json"},
+        )
 
         if discoveryUrl.status_code < 200 or discoveryUrl.status_code >= 300:
             discoveryUrl.close()
             status = discoveryUrl.status_code
             reason = discoveryUrl.text
-            raise SdsError(f"Failed to get access token endpoint "
-                           f"from discovery URL: {status}:{reason}")
+            raise SdsError(
+                f"Failed to get access token endpoint "
+                f"from discovery URL: {status}:{reason}"
+            )
 
         tokenEndpoint = json.loads(discoveryUrl.content)["token_endpoint"]
 
-        tokenInformation = requests.post(
+        tokenInformation = self.__webclient.request(
+            "post",
             tokenEndpoint,
-            data={"client_id": self.__clientId,
-                  "client_secret": self.__clientSecret,
-                  "grant_type": "client_credentials"})
+            data={
+                "client_id": self.__clientId,
+                "client_secret": self.__clientSecret,
+                "grant_type": "client_credentials",
+            },
+        )
 
         token = json.loads(tokenInformation.content)
 
         expiration = token.get("expires_in", None)
         if expiration is None:
             raise SdsError(
-                f"Failed to get token, check client id/secret: {token['error']}")
+                f"Failed to get token, check client id/secret: {token['error']}"
+            )
 
         self.__expiration = float(expiration) + time.time()
-        self.__token = token['access_token']
+        self.__token = token["access_token"]
         return self.__token
 
     def sdsHeaders(self):
@@ -119,15 +136,35 @@ class BaseClient(object):
         Gets the base headers needed for OCS call
         :return:
         """
-        headers = {"Authorization": "Bearer %s" % self.__getToken(),
-                   "Content-type": "application/json",
-                   "Accept": "application/json"}
-        if (self.__acceptVerbosity):
-            headers['Accept-Verbosity'] = "verbose"
+        headers = {
+            "Authorization": "Bearer %s" % self.__getToken(),
+            "Content-type": "application/json",
+            "Accept": "application/json",
+        }
+        if self.__acceptVerbosity:
+            headers["Accept-Verbosity"] = "verbose"
         if self.__requestTimeout is not None:
-            headers['Request-Timeout'] = str(self.__requestTimeout)
+            headers["Request-Timeout"] = str(self.__requestTimeout)
 
         return headers
+
+    def request(self, method, url, params=None, headers=None, **kwargs):
+        if not headers:
+            headers = self.sdsHeaders()
+        # only when locust is used
+        if kwargs.get("name", False):
+            response = self.__webclient.request(
+                method, url, params=params, headers=headers, catch_response=True, **kwargs
+            )
+            if response.status_code != 200:
+                response.failure(
+                    f"[{response.status_code}] url={response.url} -|@|- headers={response.headers} -|@|- content={response.content}"
+                )
+            else:
+                response.success()
+            return response
+        else:
+            return self.__webclient.request(method, url, params=params, headers=headers, **kwargs)
 
     def checkResponse(self, response, main_message):
         if response.status_code < 200 or response.status_code >= 300:

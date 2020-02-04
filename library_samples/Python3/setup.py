@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="ocs_sample_library_preview",
-    version="0.0.36_preview",
+    name="ocs_sample_library_preview_hub",
+    version="0.0.72_preview",
     author="OSIsoft",
     license="Apache 2.0",
     author_email="dendres@osisoft.com",
@@ -16,7 +16,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         'requests==2.22.0',
-        'python-dateutil==2.8.0'
+        'python-dateutil==2.8.1'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

@@ -43,11 +43,14 @@ class Streams(object):
             self.__streamViewsPath.format(
                 tenant_id=self.__tenant,
                 namespace_id=namespace_id,
-                streamView_id=streamView_id),
-            headers=self.__baseClient.sdsHeaders())
+                streamView_id=streamView_id,
+            ),
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get SdsStreamView, {streamView_id}.")
+            response, f"Failed to get SdsStreamView, {streamView_id}."
+        )
 
         streamView = SdsStreamView.fromJson(json.loads(response.content))
         response.close()
@@ -70,11 +73,15 @@ class Streams(object):
             self.__streamViewsPath.format(
                 tenant_id=self.__tenant,
                 namespace_id=namespace_id,
-                streamView_id=streamView_id) + "/Map",
-            headers=self.__baseClient.sdsHeaders())
+                streamView_id=streamView_id,
+            )
+            + "/Map",
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get SdsStreamViewMap, {streamView_id}.")
+            response, f"Failed to get SdsStreamViewMap, {streamView_id}."
+        )
 
         streamViewMap = SdsStreamViewMap.fromJson(json.loads(response.text))
         response.close()
@@ -94,12 +101,12 @@ class Streams(object):
 
         response = requests.get(
             self.__getStreamViewsPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id),
+                tenant_id=self.__tenant, namespace_id=namespace_id
+            ),
             params={"skip": skip, "count": count},
-            headers=self.__baseClient.sdsHeaders())
-        self.__baseClient.checkResponse(
-            response, "Failed to get all SdsStreamViews.")
+            headers=self.__baseClient.sdsHeaders(),
+        )
+        self.__baseClient.checkResponse(response, "Failed to get all SdsStreamViews.")
 
         content = json.loads(response.content)
         results = []
@@ -125,12 +132,15 @@ class Streams(object):
             self.__streamViewsPath.format(
                 tenant_id=self.__tenant,
                 namespace_id=namespace_id,
-                streamView_id=streamView.Id),
+                streamView_id=streamView.Id,
+            ),
             data=streamView.toJson(),
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to create SdsStreamView, {streamView.Id}.")
+            response, f"Failed to create SdsStreamView, {streamView.Id}."
+        )
 
         streamView = SdsStreamView.fromJson(json.loads(response.text))
         response.close()
@@ -153,11 +163,14 @@ class Streams(object):
             self.__streamViewsPath.format(
                 tenant_id=self.__tenant,
                 namespace_id=namespace_id,
-                streamView_id=streamView.Id),
+                streamView_id=streamView.Id,
+            ),
             data=streamView.toJson(),
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
         self.__baseClient.checkResponse(
-            response, f"Failed to create SdsStreamView, {streamView.Id}.")
+            response, f"Failed to create SdsStreamView, {streamView.Id}."
+        )
 
         response.close()
 
@@ -178,11 +191,14 @@ class Streams(object):
             self.__streamViewsPath.format(
                 tenant_id=self.__tenant,
                 namespace_id=namespace_id,
-                streamView_id=streamView_id),
-            headers=self.__baseClient.sdsHeaders())
+                streamView_id=streamView_id,
+            ),
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to delete SdsStreamView, {streamView_id}.")
+            response, f"Failed to delete SdsStreamView, {streamView_id}."
+        )
 
         response.close()
 
@@ -200,13 +216,14 @@ class Streams(object):
 
         response = requests.get(
             self.__streamsPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id),
-            headers=self.__baseClient.sdsHeaders())
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            ),
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get SdsStream, {stream_id}.")
+            response, f"Failed to get SdsStream, {stream_id}."
+        )
 
         stream = SdsStream.fromJson(json.loads(response.content))
         response.close()
@@ -226,13 +243,15 @@ class Streams(object):
 
         response = requests.get(
             self.__streamsPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id) + "/Type",
-            headers=self.__baseClient.sdsHeaders())
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            )
+            + "/Type",
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get SdsStream type,  {stream_id}.")
+            response, f"Failed to get SdsStream type,  {stream_id}."
+        )
 
         type = SdsType.fromJson(json.loads(response.content))
         response.close()
@@ -255,13 +274,13 @@ class Streams(object):
 
         response = requests.get(
             self.__getStreamsPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id),
+                tenant_id=self.__tenant, namespace_id=namespace_id
+            ),
             params={"query": query, "skip": skip, "count": count},
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
-        self.__baseClient.checkResponse(
-            response, "Failed to get all SdsStreams.")
+        self.__baseClient.checkResponse(response, "Failed to get all SdsStreams.")
 
         content = json.loads(response.content)
         results: [SdsStream] = []
@@ -284,14 +303,15 @@ class Streams(object):
             raise TypeError
         response = requests.post(
             self.__streamsPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream.Id),
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream.Id
+            ),
             data=stream.toJson(),
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to create SdsStream, {stream.Id}.")
+            response, f"Failed to create SdsStream, {stream.Id}."
+        )
 
         stream = SdsStream.fromJson(json.loads(response.content))
         response.close()
@@ -312,14 +332,15 @@ class Streams(object):
 
         response = requests.put(
             self.__streamsPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream.Id),
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream.Id
+            ),
             data=stream.toJson(),
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to create SdsStream, {stream.Id}.")
+            response, f"Failed to create SdsStream, {stream.Id}."
+        )
 
         response.close()
 
@@ -341,14 +362,15 @@ class Streams(object):
 
         response = requests.put(
             self.__updateStreamTypePath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=streamId),
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=streamId
+            ),
             params={"streamViewId": streamViewId},
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to update SdsStream type, {streamId}.")
+            response, f"Failed to update SdsStream type, {streamId}."
+        )
 
         response.close()
 
@@ -366,13 +388,14 @@ class Streams(object):
 
         response = requests.delete(
             self.__streamsPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id),
-            headers=self.__baseClient.sdsHeaders())
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            ),
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to delete SdsStream, {stream_id}.")
+            response, f"Failed to delete SdsStream, {stream_id}."
+        )
 
         response.close()
 
@@ -391,14 +414,16 @@ class Streams(object):
 
         response = requests.put(
             self.__streamsPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=streamId) + "/Tags",
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=streamId
+            )
+            + "/Tags",
             data=json.dumps(tags),
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to create tags for Stream: {streamId}.")
+            response, f"Failed to create tags for Stream: {streamId}."
+        )
 
     def createOrUpdateMetadata(self, namespace_id, streamId, metadata):
         """
@@ -415,14 +440,16 @@ class Streams(object):
 
         response = requests.put(
             self.__streamsPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=streamId) + "/Metadata",
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=streamId
+            )
+            + "/Metadata",
             data=json.dumps(metadata),
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to create metadata for Stream: {streamId}.")
+            response, f"Failed to create metadata for Stream: {streamId}."
+        )
 
     def getTags(self, namespace_id, streamId):
         """
@@ -436,13 +463,15 @@ class Streams(object):
 
         response = requests.get(
             self.__streamsPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=streamId) + "/Tags",
-            headers=self.__baseClient.sdsHeaders())
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=streamId
+            )
+            + "/Tags",
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get tags for Stream: {streamId}.")
+            response, f"Failed to get tags for Stream: {streamId}."
+        )
 
         content = json.loads(response.text)
         response.close()
@@ -462,13 +491,16 @@ class Streams(object):
 
         response = requests.get(
             self.__streamsPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=streamId) + "/Metadata/" + key,
-            headers=self.__baseClient.sdsHeaders())
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=streamId
+            )
+            + "/Metadata/"
+            + key,
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get metadata for Stream: {streamId}.")
+            response, f"Failed to get metadata for Stream: {streamId}."
+        )
 
         content = json.loads(response.text)
         response.close()
@@ -500,14 +532,15 @@ class Streams(object):
 
         response = requests.get(
             self.__dataPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id),
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            ),
             params={"index": index},
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get value for SdsStream: {stream_id}.")
+            response, f"Failed to get value for SdsStream: {stream_id}."
+        )
 
         content = json.loads(response.content)
         response.close()
@@ -535,13 +568,14 @@ class Streams(object):
 
         response = requests.get(
             self.__getFirstValue.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id),
-            headers=self.__baseClient.sdsHeaders())
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            ),
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get first value for SdsStream: {stream_id}.")
+            response, f"Failed to get first value for SdsStream: {stream_id}."
+        )
 
         content = json.loads(response.content)
         response.close()
@@ -568,13 +602,14 @@ class Streams(object):
 
         response = requests.get(
             self.__getLastValue.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id),
-            headers=self.__baseClient.sdsHeaders())
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            ),
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get last value for SdsStream: {stream_id}.")
+            response, f"Failed to get last value for SdsStream: {stream_id}."
+        )
 
         content = json.loads(response.text)
         response.close()
@@ -582,8 +617,9 @@ class Streams(object):
             return content
         return value_class.fromJson(content)
 
-    def getWindowValues(self, namespace_id, stream_id, value_class, start, end,
-                        filter=""):
+    def getWindowValues(
+        self, namespace_id, stream_id, value_class, start, end, filter=""
+    ):
         """
         Retrieves JSON object representing a window of values from the stream
             specified by 'stream_id'
@@ -610,15 +646,15 @@ class Streams(object):
 
         response = requests.get(
             self.__dataPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id),
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            ),
             params={"startIndex": start, "endIndex": end, "filter": filter},
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get window values"
-                      " for SdsStream: {stream_id}.")
+            response, f"Failed to get window values" " for SdsStream: {stream_id}."
+        )
 
         content = json.loads(response.text)
         response.close()
@@ -630,8 +666,9 @@ class Streams(object):
             values.append(value_class.fromDictionary(c))
         return values
 
-    def getWindowValuesForm(self, namespace_id, stream_id, value_class, start,
-                            end, form=""):
+    def getWindowValuesForm(
+        self, namespace_id, stream_id, value_class, start, end, form=""
+    ):
         """
         Retrieves JSON object representing a window of values from the stream
             specified by 'stream_id'.  Use this to get the data in a different
@@ -658,15 +695,16 @@ class Streams(object):
 
         response = requests.get(
             self.__dataPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id),
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            ),
             params={"startIndex": start, "endIndex": end, "form": form},
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get window values for SdsStream, "
-                      "form : {stream_id}.")
+            response,
+            f"Failed to get window values for SdsStream, " "form : {stream_id}.",
+        )
 
         content = json.loads(response.text)
         response.close()
@@ -678,8 +716,18 @@ class Streams(object):
             values.append(value_class.fromDictionary(c))
         return values
 
-    def getRangeValues(self, namespace_id, stream_id, value_class, start, skip,
-                       count, reverse, boundary_type, streamView_id=""):
+    def getRangeValues(
+        self,
+        namespace_id,
+        stream_id,
+        value_class,
+        start,
+        skip,
+        count,
+        reverse,
+        boundary_type,
+        streamView_id="",
+    ):
         """
         Retrieves JSON object representing a range of values from the stream
             specified by 'stream_id'
@@ -720,17 +768,22 @@ class Streams(object):
 
         response = requests.get(
             self.__transform.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id),
-            params={"startIndex": start, "skip": skip, "count": count,
-                    "reverse": reverse, "boundary_type": boundary,
-                    "streamView_id": streamView_id},
-            headers=self.__baseClient.sdsHeaders())
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            ),
+            params={
+                "startIndex": start,
+                "skip": skip,
+                "count": count,
+                "reverse": reverse,
+                "boundary_type": boundary,
+                "streamView_id": streamView_id,
+            },
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get range values for"
-            " SdsStream: {stream_id}.")
+            response, f"Failed to get range values for" " SdsStream: {stream_id}."
+        )
 
         content = json.loads(response.text)
         response.close()
@@ -741,8 +794,9 @@ class Streams(object):
             values.append(value_class.fromJson(c))
         return values
 
-    def getRangeValuesInterpolated(self, namespace_id, stream_id, value_class,
-                                   start, end, count):
+    def getRangeValuesInterpolated(
+        self, namespace_id, stream_id, value_class, start, end, count, **kwargs
+    ):
         """
         Retrieves JSON object representing a range of values from the stream
             specified by 'stream_id'
@@ -769,17 +823,18 @@ class Streams(object):
         if count is None:
             raise TypeError
 
-        response = requests.get(
+        response = self.__baseClient.request(
+            "get",
             self.__getRangeInterpolatedQuery.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id),
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            ),
             params={"startIndex": start, "endIndex": end, "count": count},
-            headers=self.__baseClient.sdsHeaders())
+            **kwargs,
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get range values for"
-                      " SdsStream: {stream_id}.")
+            response, f"Failed to get range values for" " SdsStream: {stream_id}."
+        )
 
         content = json.loads(response.text)
         response.close()
@@ -790,9 +845,18 @@ class Streams(object):
             values.append(value_class.fromJson(c))
         return values
 
-    def getSampledValues(self, namespace_id, stream_id, value_class, start,
-                         end, sample_by, intervals, filter="",
-                         stream_view_id=""):
+    def getSampledValues(
+        self,
+        namespace_id,
+        stream_id,
+        value_class,
+        start,
+        end,
+        sample_by,
+        intervals,
+        filter="",
+        stream_view_id="",
+    ):
         """
         Returns data sampled by intervals between a specified start and end
             index.
@@ -834,29 +898,30 @@ class Streams(object):
         # and stream_view_id parameter
         if len(stream_view_id) == 0:
             _path = self.__getSampledValues.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id)
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            )
 
         else:
             _path = self.__getSampledValuesT.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id)
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            )
 
         response = requests.get(
-                _path,
-                params={"startIndex": start,
-                        "endIndex": end,
-                        "sampleBy": sample_by,
-                        "intervals": intervals,
-                        "filter": filter,
-                        "stream_view_id": stream_view_id},
-                headers=self.__baseClient.sdsHeaders())
+            _path,
+            params={
+                "startIndex": start,
+                "endIndex": end,
+                "sampleBy": sample_by,
+                "intervals": intervals,
+                "filter": filter,
+                "stream_view_id": stream_view_id,
+            },
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get sampled values for"
-                      " SdsStream: {stream_id}.")
+            response, f"Failed to get sampled values for" " SdsStream: {stream_id}."
+        )
 
         content = json.loads(response.text)
         response.close()
@@ -868,8 +933,17 @@ class Streams(object):
             values.append(value_class.fromJson(c))
         return values
 
-    def getSummaries(self, namespace_id, stream_id, value_class, start, end,
-                     count, stream_view_id="", filter=""):
+    def getSummaries(
+        self,
+        namespace_id,
+        stream_id,
+        value_class,
+        start,
+        end,
+        count,
+        stream_view_id="",
+        filter="",
+    ):
         """
         Retrieves JSON object representing a summary for the stream specified
             by 'stream_id'
@@ -905,32 +979,35 @@ class Streams(object):
         paramsToUse = {}
         if len(stream_view_id) == 0:
             _path = self.__getSummaries.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id)   
-                         
-            paramsToUse={"startIndex": start,
-                    "endIndex": end,
-                    "count": count,
-                    "filter": filter}
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            )
+
+            paramsToUse = {
+                "startIndex": start,
+                "endIndex": end,
+                "count": count,
+                "filter": filter,
+            }
         else:
             _path = self.__getSummariesT.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id)
-            
-            paramsToUse={"startIndex": start,
-                    "endIndex": end,
-                    "count": count,
-                    "filter": filter,
-                    "streamViewId": stream_view_id}
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            )
+
+            paramsToUse = {
+                "startIndex": start,
+                "endIndex": end,
+                "count": count,
+                "filter": filter,
+                "streamViewId": stream_view_id,
+            }
 
         response = requests.get(
-                _path,paramsToUse,
-                headers=self.__baseClient.sdsHeaders())
+            _path, paramsToUse, headers=self.__baseClient.sdsHeaders()
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get summaries for SdsStream: {stream_id}.")
+            response, f"Failed to get summaries for SdsStream: {stream_id}."
+        )
 
         content = json.loads(response.text)
         response.close()
@@ -970,15 +1047,16 @@ class Streams(object):
 
         response = requests.post(
             self.__insertValuesPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id),
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            ),
             data=payload,
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to insert multiple values for "
-                      " SdsStream: {stream_id}.")
+            response,
+            f"Failed to insert multiple values for " " SdsStream: {stream_id}.",
+        )
 
     def updateValues(self, namespace_id, stream_id, values):
         """
@@ -1006,16 +1084,17 @@ class Streams(object):
         else:
             payload = values
 
-        response = requests.put(self.__updateValuesPath.format(
-                                    tenant_id=self.__tenant,
-                                    namespace_id=namespace_id,
-                                    stream_id=stream_id),
-                                data=payload,
-                                headers=self.__baseClient.sdsHeaders())
+        response = requests.put(
+            self.__updateValuesPath.format(
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            ),
+            data=payload,
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response,  f"Failed to update all values "
-                       " for SdsStream: {stream_id}.")
+            response, f"Failed to update all values " " for SdsStream: {stream_id}."
+        )
 
         response.close()
 
@@ -1046,14 +1125,15 @@ class Streams(object):
 
         response = requests.put(
             self.__replaceValuesPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id),
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            ),
             data=payload,
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to replace values for SdsStream: {stream_id}.")
+            response, f"Failed to replace values for SdsStream: {stream_id}."
+        )
 
         response.close()
 
@@ -1075,14 +1155,15 @@ class Streams(object):
 
         response = requests.delete(
             self.__dataPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id),
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            ),
             params={"index": key},
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to remove value for SdsStream: {stream_id}.")
+            response, f"Failed to remove value for SdsStream: {stream_id}."
+        )
 
         response.close()
 
@@ -1107,20 +1188,21 @@ class Streams(object):
 
         response = requests.delete(
             self.__dataPath.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id,
-                stream_id=stream_id),
+                tenant_id=self.__tenant, namespace_id=namespace_id, stream_id=stream_id
+            ),
             params={"startIndex": start, "endIndex": end},
-            headers=self.__baseClient.sdsHeaders())
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to remove all values for "
-                      " SdsStream: {stream_id}.")
+            response, f"Failed to remove all values for " " SdsStream: {stream_id}."
+        )
 
         response.close()
 
-    def getStreamsWindow(self, namespace_id, stream_ids, value_class, start,
-                         end, joinMode=1):
+    def getStreamsWindow(
+        self, namespace_id, stream_ids, value_class, start, end, joinMode=1
+    ):
         """
         Retrieves JSON object representing a window of values from the stream
              specified by 'stream_id'
@@ -1152,17 +1234,20 @@ class Streams(object):
 
         response = requests.get(
             self.__bulkStreams.format(
-                tenant_id=self.__tenant,
-                namespace_id=namespace_id),
-            params={"streams": ','.join(stream_ids),
-                    "startIndex": start,
-                    "endIndex": end,
-                    "joinMode": joinMode},
-            headers=self.__baseClient.sdsHeaders())
+                tenant_id=self.__tenant, namespace_id=namespace_id
+            ),
+            params={
+                "streams": ",".join(stream_ids),
+                "startIndex": start,
+                "endIndex": end,
+                "joinMode": joinMode,
+            },
+            headers=self.__baseClient.sdsHeaders(),
+        )
 
         self.__baseClient.checkResponse(
-            response, f"Failed to get bulk values for"
-                      " SdsStream: {stream_ids}.")
+            response, f"Failed to get bulk values for" " SdsStream: {stream_ids}."
+        )
 
         content = json.loads(response.text)
         response.close()
@@ -1184,8 +1269,9 @@ class Streams(object):
         creates the urls that are used
         :return:
         """
-        self.__basePath = self.__uri_API + \
-            "/Tenants/{tenant_id}/Namespaces/{namespace_id}"
+        self.__basePath = (
+            self.__uri_API + "/Tenants/{tenant_id}/Namespaces/{namespace_id}"
+        )
         self.__getStreamViewsPath = self.__basePath + "/StreamViews"
         self.__streamViewsPath = self.__getStreamViewsPath + "/{streamView_id}"
         self.__getStreamsPath = self.__basePath + "/Streams"

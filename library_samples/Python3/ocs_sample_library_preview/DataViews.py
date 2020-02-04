@@ -242,6 +242,7 @@ class DataViews(object):
         endIndex=None,
         interval=None,
         value_class=None,
+        **kwargs,
     ):
         """
         Retrieves the interpolated data of the 'dataView_id' from Sds Service
@@ -272,14 +273,15 @@ class DataViews(object):
             "endIndex": endIndex,
             "interval": interval,
         }
-        response = requests.get(
+        response = self.__baseClient.request(
+            "get",
             self.__getDataInterpolated.format(
                 tenant_id=self.__baseClient.tenant,
                 namespace_id=namespace_id,
                 dataView_id=dataView_id,
             ),
-            headers=self.__baseClient.sdsHeaders(),
             params=params,
+            **kwargs,
         )
 
         self.__baseClient.checkResponse(
@@ -293,10 +295,11 @@ class DataViews(object):
             token_param = "&continuationToken="
             token_position = next_page.find(token_param)
             assert token_position > 0, "Could not find continuationToken in NextPage"
-            end_position = next_page.find("&", token_position+1)
+            end_position = next_page.find("&", token_position + 1)
             end_position = None if end_position == -1 else end_position
-            continuation_token = next_page[token_position +
-                                           len(token_param):end_position]
+            continuation_token = next_page[
+                token_position + len(token_param) : end_position
+            ]
 
         if form is not None:
             return response.text, continuation_token
@@ -313,8 +316,7 @@ class DataViews(object):
         :return:
         """
         self.__basePath = (
-            self.__baseClient.uri_API +
-            "/Tenants/{tenant_id}/Namespaces/{namespace_id}"
+            self.__baseClient.uri_API + "/Tenants/{tenant_id}/Namespaces/{namespace_id}"
         )
 
         self.__dataViewsPath = self.__basePath + "/dataviews"
